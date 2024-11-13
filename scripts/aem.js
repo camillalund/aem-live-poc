@@ -386,6 +386,7 @@ function wrapTextNodes(block) {
  * Decorates paragraphs containing a single link as buttons.
  * @param {Element} element container element
  */
+import signalTrack from './signal.js';
 function decorateButtons(element) {
   element.querySelectorAll('a').forEach((a) => {
     a.title = a.title || a.textContent;
@@ -394,8 +395,9 @@ function decorateButtons(element) {
       const twoup = a.parentElement.parentElement;
       if (!a.querySelector('img')) {
         if (up.childNodes.length === 1 && (up.tagName === 'P' || up.tagName === 'DIV')) {
-          a.className = 'button'; // default
+          a.className = 'button button--action'; // default
           up.classList.add('button-container');
+          
         }
         if (
           up.childNodes.length === 1
@@ -416,6 +418,9 @@ function decorateButtons(element) {
           twoup.classList.add('button-container');
         }
       }
+      a.addEventListener('click', () => {
+        signalTrack({ text: a.textContent,target: a.href });
+      });
     }
   });
 }
